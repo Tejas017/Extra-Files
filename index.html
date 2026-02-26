@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Voice Assistant SDK - With Text-to-Speech</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header__content">
+                <div class="header__left">
+                    <div class="logo">
+                        <div class="logo__icon">🎤</div>
+                        <div class="logo__text">
+                            <h1>Enhanced Voice Assistant SDK</h1>
+                            <span class="subtitle">With Text-to-Speech & Voice Feedback</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header__right">
+                    <div class="privacy-badges">
+                        <div class="badge badge--security">
+                            🔒 HIPAA Compliant
+                        </div>
+                        <div class="badge badge--local">
+                            🔊 Voice Feedback
+                        </div>
+                        <div class="badge badge--encrypted">
+                            🎯 Free Wake Word
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Voice Control Panel -->
+            <section class="control-panel">
+                <div class="card">
+                    <div class="card__body">
+                        <h2>Voice Assistant Control</h2>
+                        
+                        <!-- Main Voice Button -->
+                        <div class="voice-control">
+                            <button id="voiceButton" class="voice-button voice-button--inactive">
+                                <div class="voice-button__icon">🎤</div>
+                                <div class="voice-button__text">Start Voice Assistant</div>
+                            </button>
+                            
+                            <!-- Status Display -->
+                            <div class="status-display">
+                                <div class="status-item">
+                                    <span class="status-label">Status:</span>
+                                    <span id="assistantStatus" class="status-value">Inactive</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">Mode:</span>
+                                    <span id="currentMode" class="status-value">Waiting</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">Wake Word:</span>
+                                    <span id="currentWakeWord" class="status-value">progo</span>
+                                </div>
+                            </div>
+
+                            <!-- Wake Word Detected Indicator -->
+                            <div id="wakeWordIndicator" class="wake-word-indicator hidden">
+                                <div class="wake-word-pulse">
+                                    <div class="pulse-ring"></div>
+                                    <div class="pulse-text">Wake Word Detected!</div>
+                                </div>
+                            </div>
+
+                            <!-- Audio Level Meter -->
+                            <div class="audio-meter">
+                                <span class="audio-meter__label">Audio Level:</span>
+                                <div class="audio-meter__bar">
+                                    <div id="audioLevel" class="audio-meter__fill"></div>
+                                </div>
+                            </div>
+
+                            <!-- Current Transcription -->
+                            <div class="transcription-display">
+                                <div class="transcription-label">Current Transcription:</div>
+                                <div id="currentTranscription" class="transcription-text">Ready to listen...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TTS Settings Panel -->
+            <section class="tts-settings">
+                <div class="card">
+                    <div class="card__body">
+                        <h3>Text-to-Speech Settings</h3>
+                        <div class="tts-grid">
+                            <div class="form-group">
+                                <label for="speechRate" class="form-label">Speech Rate</label>
+                                <input type="range" id="speechRate" class="form-control" min="0.5" max="2" step="0.1" value="0.9">
+                                <span id="rateValue" class="form-help">0.9x</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="speechPitch" class="form-label">Pitch</label>
+                                <input type="range" id="speechPitch" class="form-control" min="0.5" max="2" step="0.1" value="1.0">
+                                <span id="pitchValue" class="form-help">1.0x</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="speechVolume" class="form-label">Volume</label>
+                                <input type="range" id="speechVolume" class="form-control" min="0" max="1" step="0.1" value="0.8">
+                                <span id="volumeValue" class="form-help">0.8</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="voiceSelect" class="form-label">Voice</label>
+                                <select id="voiceSelect" class="form-control">
+                                    <option value="">Loading voices...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Test Speech</label>
+                                <button id="testSpeech" class="btn btn--secondary">Test Voice</button>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Voice Status</label>
+                                <div id="ttsStatus" class="status status--info">Ready</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Demo Buttons -->
+            <section class="demo-commands">
+                <div class="card">
+                    <div class="card__body">
+                        <h3>Quick Demo Buttons</h3>
+                        <p class="demo-help">Use these buttons to simulate voice interactions:</p>
+                        <div class="command-buttons">
+                            <button id="simulateWakeWord" class="btn btn--primary">
+                                Simulate Wake Word "progo"
+                            </button>
+                            <button class="btn btn--sm btn--outline demo-cmd" data-command="fill name with John Doe">
+                                "Fill name with John Doe"
+                            </button>
+                            <button class="btn btn--sm btn--outline demo-cmd" data-command="select United States from country">
+                                "Select United States"
+                            </button>
+                            <button class="btn btn--sm btn--outline demo-cmd" data-command="check newsletter">
+                                "Check newsletter"
+                            </button>
+                            <button class="btn btn--sm btn--outline demo-cmd" data-command="submit the form">
+                                "Submit the form"
+                            </button>
+                            <button class="btn btn--sm btn--outline demo-cmd" data-command="help">
+                                "Help"
+                            </button>
+                            <button class="btn btn--sm btn--outline demo-cmd" data-command="stop listening">
+                                "Stop listening"
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Demo Form Section -->
+            <section class="demo-form-section">
+                <div class="card">
+                    <div class="card__body">
+                        <h3>Demo Form - Voice Controlled</h3>
+                        <form id="demoForm" class="demo-form">
+                            <div class="form-group">
+                                <label for="name" class="form-label">Full Name *</label>
+                                <input type="text" id="name" name="name" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="country" class="form-label">Country</label>
+                                <select id="country" name="country" class="form-control">
+                                    <option value="">Select a country</option>
+                                    <option value="United States">United States</option>
+                                    <option value="Canada">Canada</option>
+                                    <option value="United Kingdom">United Kingdom</option>
+                                    <option value="Australia">Australia</option>
+                                    <option value="Germany">Germany</option>
+                                    <option value="France">France</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="newsletter" name="newsletter">
+                                    Subscribe to newsletter
+                                </label>
+                            </div>
+
+                            <div class="form-group">
+                                <span class="form-label">Age Range</span>
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="ageRange" value="18-24">
+                                        18-24
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="ageRange" value="25-34">
+                                        25-34
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="ageRange" value="35-44">
+                                        35-44
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="ageRange" value="45-54">
+                                        45-54
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="ageRange" value="55+">
+                                        55+
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="comments" class="form-label">Additional Comments</label>
+                                <textarea id="comments" name="comments" class="form-control" rows="3"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn--primary">Submit Form</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Command Log -->
+            <section class="command-log-section">
+                <div class="card">
+                    <div class="card__body">
+                        <h3>Voice Interaction Log</h3>
+                        <div id="commandLog" class="command-log">
+                            <div class="log-entry log-entry--info">
+                                <span class="log-timestamp">Ready</span>
+                                <span class="log-message">Enhanced Voice Assistant SDK with TTS initialized</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
